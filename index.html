@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Insurance Recommendation Form</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f4f4;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      background-color: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      width: 300px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label {
+      font-weight: bold;
+      margin: 8px 0;
+      display: block;
+    }
+
+    input, select {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 12px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
+    .output {
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f0f0f0;
+      border-radius: 4px;
+    }
+
+    .output p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Insurance Recommendation</h2>
+    
+    <label for="age">Current Age:</label>
+    <input type="number" id="age" name="age" required>
+
+    <label for="licensedAge">Licensed Age:</label>
+    <input type="number" id="licensedAge" name="licensedAge" required>
+
+    <label for="income">Income ($):</label>
+    <input type="number" id="income" name="income" required>
+
+    <label for="carYear">Car Year:</label>
+    <input type="number" id="carYear" name="carYear" required>
+
+    <label for="make">Car Make:</label>
+    <input type="text" id="make" name="make" required>
+
+    <label for="model">Car Model:</label>
+    <input type="text" id="model" name="model" required>
+
+    <label for="carFailureRisk">Car Failure Risk:</label>
+    <select id="carFailureRisk" name="carFailureRisk" required>
+      <option value="minor">Minor</option>
+      <option value="moderate">Moderate</option>
+      <option value="high">High</option>
+    </select>
+
+    <label for="drivingRecord">Driving Record:</label>
+    <input type="text" id="drivingRecord" name="drivingRecord" required>
+
+    <button type="button" onclick="generateInsurance()">Get Insurance Recommendation</button>
+
+    <div class="output" id="output">
+      <!-- Results will appear here -->
+    </div>
+  </div>
+
+  <script>
+    function generateInsurance() {
+      const age = parseInt(document.getElementById("age").value);
+      const licensedAge = parseInt(document.getElementById("licensedAge").value);
+      const income = parseInt(document.getElementById("income").value);
+      const carYear = parseInt(document.getElementById("carYear").value);
+      const make = document.getElementById("make").value;
+      const model = document.getElementById("model").value;
+      const carFailureRisk = document.getElementById("carFailureRisk").value;
+      const drivingRecord = document.getElementById("drivingRecord").value;
+
+      let premium = 1000; // Base premium
+
+      // Adjust premium based on age
+      if (age < 25) {
+        premium += 200; // Young drivers tend to have higher premiums
+      }
+
+      // Adjust premium based on car year
+      if (carYear < 2015) {
+        premium += 150; // Older cars can be more expensive to insure
+      }
+
+      // Adjust premium based on car failure risk
+      if (carFailureRisk === "high") {
+        premium += 300; // High failure risk increases the premium
+      } else if (carFailureRisk === "moderate") {
+        premium += 150;
+      }
+
+      // Adjust premium based on driving record
+      if (drivingRecord.toLowerCase().includes("ticket")) {
+        premium += 100; // Additional premium for past tickets
+      }
+
+      // Adjust premium based on income (Discount for higher income)
+      if (income > 50000) {
+        premium -= 100; // Income over $50,000 gets a discount
+      }
+
+      // Set deductible based on age
+      let deductible = 500; // Default deductible
+      if (age < 25) {
+        deductible = 1000; // Higher deductible for younger drivers
+      }
+
+      // Set discounts based on car make
+      let discount = 0;
+      if (make.toLowerCase() === "toyota" || make.toLowerCase() === "honda") {
+        discount = 50; // Discount for popular, reliable brands
+      }
+
+      premium -= discount;
+
+      // Display the result
+      const output = `
+        <p><strong>Insurance Premium: $${premium}</strong></p>
+        <p><strong>Deductible: $${deductible}</strong></p>
+        <p><strong>Car Discount: $${discount}</strong></p>
+      `;
+      document.getElementById("output").innerHTML = output;
+    }
+  </script>
+
+</body>
+</html>
